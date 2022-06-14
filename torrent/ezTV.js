@@ -1,5 +1,6 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
+const { setup_proxy } = require('../axios-ext');
 
 
 async function ezTV(query) {
@@ -7,8 +8,8 @@ async function ezTV(query) {
     const url = 'https://eztv.re/search/' + query;
     let html;
     try {
-        html = await axios.get(url);
-    } catch{
+        html = await setup_proxy().get(url);
+    } catch {
         return null;
     }
 

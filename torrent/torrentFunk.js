@@ -1,10 +1,11 @@
 const cheerio = require('cheerio')
 const axios = require('axios')
+const { setup_proxy } = require('../axios-ext');
 
-async function torrentFunk(query, page=1) {
+async function torrentFunk(query, page = 1) {
     var ALLTORRENT = [];
     var ALLURL = [];
-    
+
     if (page === '' || page === '1') {
         var url = 'https://www.torrentfunk.com/all/torrents/' + query + '.html'
     } else {
@@ -13,7 +14,7 @@ async function torrentFunk(query, page=1) {
 
     let html;
     try {
-        html = await axios.get(url, headers = {
+        html = await setup_proxy().get(url, headers = {
             "User-Agent": "Mozilla/5.0 (Linux; Android 12) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.87 Mobile Safari/537.36"
         });
 
@@ -48,7 +49,7 @@ async function torrentFunk(query, page=1) {
             if (ALLTORRENT[i]['Url'] === url) {
                 let html;
                 try {
-                    html = await axios.get(url, headers = {
+                    html = await setup_proxy().get(url, headers = {
                         "User-Agent": "Mozilla/5.0 (Linux; Android 12) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.87 Mobile Safari/537.36"
                     });
                 } catch {

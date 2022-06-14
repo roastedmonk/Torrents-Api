@@ -1,5 +1,6 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
+const { setup_proxy } = require('../axios-ext');
 const dev = require('request-promise');
 
 async function ettvCentral(query, page = '0') {
@@ -36,7 +37,7 @@ async function ettvCentral(query, page = '0') {
             }
         })
     })
-    await Promise.all(ALLURLARRAY.map(async (url) => {
+    await Promise.all(ALLURLARRAY.map(async(url) => {
         for (let i = 0; i < ALLTORRENT.length; i++) {
             if (ALLTORRENT[i]['Url'] === url) {
                 let html;

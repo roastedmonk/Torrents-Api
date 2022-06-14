@@ -1,14 +1,15 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
+const { setup_proxy } = require('../axios-ext');
 
 async function torLock(query = '', page = '1') {
 
     const ALLTORRENT = [];
-    const ALLURL =[]
+    const ALLURL = []
     const url = encodeURI('https://www.torlock.com/all/torrents/' + query + '/' + page + '.html');
     let html;
     try {
-        html = await axios.get(url);
+        html = await setup_proxy().get(url);
     } catch (error) {
         return null;
     }
@@ -39,7 +40,7 @@ async function torLock(query = '', page = '1') {
             if (ALLTORRENT[i]['Url'] === url) {
                 let html;
                 try {
-                    html = await axios.get(url, headers = {
+                    html = await setup_proxy().get(url, headers = {
                         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.106 Safari/537.36"
                     });
                 } catch {

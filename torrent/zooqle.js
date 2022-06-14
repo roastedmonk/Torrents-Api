@@ -1,5 +1,6 @@
 const cheerio = require('cheerio')
 const axios = require('axios')
+const { setup_proxy } = require('../axios-ext');
 
 
 async function zooqle(query = '', page = '1') {
@@ -7,7 +8,7 @@ async function zooqle(query = '', page = '1') {
     const url = "https://zooqle.com/search?pg=" + page + "&q=" + query;
     let html;
     try {
-        html = await axios.get(url, headers = {
+        html = await setup_proxy().get(url, headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.106 Safari/537.36"
         });
 

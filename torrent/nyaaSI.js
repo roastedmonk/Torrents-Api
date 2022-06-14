@@ -1,5 +1,6 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
+const { setup_proxy } = require('../axios-ext');
 
 
 async function nyaaSI(query, page = '1') {
@@ -7,7 +8,7 @@ async function nyaaSI(query, page = '1') {
     const url = 'https://nyaa.si/?f=0&c=0_0&q=' + query + '&p=' + page;
     let html = null;
     try {
-        html = await axios.get(url);
+        html = await setup_proxy().get(url);
     } catch {
         return null;
     }

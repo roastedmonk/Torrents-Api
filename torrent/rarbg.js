@@ -1,5 +1,6 @@
 const cheerio = require('cheerio')
 const axios = require('axios')
+const { setup_proxy } = require('../axios-ext');
 
 
 async function rarbg(query, page = '1') {
@@ -8,7 +9,7 @@ async function rarbg(query, page = '1') {
     const url = "https://rargb.to/search/" + page + "/?search=" + query;
     let html;
     try {
-        html = await axios.get(url, headers = {
+        html = await setup_proxy().get(url, headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.106 Safari/537.36"
         });
 
@@ -36,18 +37,18 @@ async function rarbg(query, page = '1') {
         })
     });
 
-    await Promise.all(ALLURLARRAY.map(async (url) => {
+    await Promise.all(ALLURLARRAY.map(async(url) => {
         for (let i = 0; i < ALLTORRENT.length; i++) {
             if (ALLTORRENT[i]['Url'] === url) {
                 let html;
-                try{
-                    html = await axios.get(url, headers = {
+                try {
+                    html = await setup_proxy().get(url, headers = {
                         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.106 Safari/537.36"
                     });
-                }catch{
+                } catch {
                     return null;
                 }
-                
+
                 let $ = cheerio.load(html.data);
 
                 let poster = "https://rargb.to" + $("tr:nth-child(4) > td:nth-child(2) > img:nth-child(1)").attr('src') || "";
@@ -61,6 +62,7 @@ async function rarbg(query, page = '1') {
         }
 
     }))
+
     return ALLTORRENT;
 }
 module.exports = rarbg;

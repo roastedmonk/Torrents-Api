@@ -1,5 +1,6 @@
 const cheerio = require('cheerio')
 const axios = require('axios')
+const { setup_proxy } = require('../axios-ext');
 
 async function torrentProject(query, page = '0') {
     var ALLTORRENT = [];
@@ -7,7 +8,7 @@ async function torrentProject(query, page = '0') {
     const url = `https://torrentproject2.com/?t=${query}&p=${page}&orderby=seeders`;
     let html;
     try {
-        html = await axios.get(url, headers = {
+        html = await setup_proxy().get(url, headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.106 Safari/537.36"
         });
 
@@ -41,7 +42,7 @@ async function torrentProject(query, page = '0') {
             if (ALLTORRENT[i]['Url'] === url) {
                 let html;
                 try {
-                    html = await axios.get(url, headers = {
+                    html = await setup_proxy().get(url, headers = {
                         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.106 Safari/537.36"
                     });
                 } catch {

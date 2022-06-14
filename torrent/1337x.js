@@ -1,48 +1,48 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
+const { setup_proxy } = require('../axios-ext');
 
 
 
 async function torrent1337x(query = '', page = '1') {
-
+    const BASE_URL = 'https://1337xx.to';
     const allTorrent = [];
     let html;
-    const url = 'https://1337xx.to/search/' + query + '/' + page + '/';
-    try{
+    const url = BASE_URL + '/search/' + query + '/' + page + '/';
+    try {
         html = await axios.get(url);
-    }catch{
+    } catch {
         return null;
     }
 
     const $ = cheerio.load(html.data)
 
     const links = $('td.name').map((_, element) => {
-        var link = 'https://1337xx.to' + $(element).find('a').next().attr('href');
+        var link = BASE_URL + $(element).find('a').next().attr('href');
         return link;
 
     }).get();
 
 
-    await Promise.all(links.map(async (element) => {
+    await Promise.all(links.map(async(element) => {
 
         const data = {};
         const labels = ['Category', 'Type', 'Language', 'Size', 'UploadedBy', 'Downloads', 'LastChecked', 'DateUploaded', 'Seeders', 'Leechers'];
         let html;
-        try{
+        try {
             html = await axios.get(element);
-        }catch{
+        } catch {
             return null;
         }
         const $ = cheerio.load(html.data);
         data.Name = $('.box-info-heading h1').text().trim();
         data.Magnet = $('.clearfix ul li a').attr('href') || "";
         const poster = $('div.torrent-image img').attr('src');
-        
+
         if (typeof poster !== 'undefined') {
-            if (poster.startsWith('http')){
+            if (poster.startsWith('http')) {
                 data.Poster = poster;
-            }
-            else{
+            } else {
                 data.Poster = 'https:' + poster;
             }
         } else {

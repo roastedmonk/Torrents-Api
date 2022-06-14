@@ -1,24 +1,25 @@
 const cheerio = require('cheerio');
 const axios = require('axios');
+const { setup_proxy } = require('../axios-ext');
 
 async function torrentGalaxy(query = '', page = '0') {
 
-    if(page !== '0'){
-        try{
+    if (page !== '0') {
+        try {
             page = Number(page) - 1;
-        }catch{
+        } catch {
             //
         }
     }
     const allTorrents = [];
     const url = "https://torrentgalaxy.to/torrents.php?search=" + query + "&sort=id&order=desc&page=" + page;
     let html;
-    try{
-        html = await axios.get(url);
-    }catch{
+    try {
+        html = await setup_proxy().get(url);
+    } catch {
         return null;
     }
-    
+
     const $ = cheerio.load(html.data);
 
     $('div.tgxtablerow.txlight').each((i, element) => {

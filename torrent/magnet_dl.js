@@ -1,9 +1,10 @@
 const cheerio = require('cheerio')
 const axios = require('axios')
+const { setup_proxy } = require('../axios-ext');
 
 async function magnet_dl(query, page) {
     var ALLTORRENT = [];
-    
+
     if (page === '' || page === '1') {
         var url = 'https://magnetdl.abcproxy.org/search/?q=' + query + '&m=1'
     } else {
@@ -12,7 +13,7 @@ async function magnet_dl(query, page) {
 
     let html;
     try {
-        html = await axios.get(url, headers = {
+        html = await setup_proxy().get(url, headers = {
             "User-Agent": "Mozilla/5.0 (Linux; Android 12) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.87 Mobile Safari/537.36"
         });
 

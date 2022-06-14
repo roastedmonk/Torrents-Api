@@ -1,5 +1,6 @@
 const cheerio = require('cheerio')
 const axios = require('axios')
+const { setup_proxy } = require('../axios-ext');
 
 async function pirateBay(query, page = '1') {
 
@@ -7,7 +8,7 @@ async function pirateBay(query, page = '1') {
     const url = 'https://thehiddenbay.com/search/' + query + '/' + page + '/99/0';
     let html;
     try {
-        html = await axios.get(url);
+        html = await setup_proxy().get(url);
     } catch {
         return null;
     }
@@ -39,6 +40,6 @@ async function pirateBay(query, page = '1') {
     return allTorrents
 }
 
-module.exports ={
-    pirateBay : pirateBay
+module.exports = {
+    pirateBay: pirateBay
 }
